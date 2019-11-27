@@ -3,7 +3,7 @@
 Simple game created using java 8 and light weight java game library 2.9
 
 
-Project has been written in NetBeans IDE 8.0.2 with Java JDK 1.8
+Project has been written in NetBeans IDE 8.0.2 with Java JDK 1.8 and MinGw compiler
 
 lwjgl-2.9 and slick-util natives needs to be added to the NetBeans Library for the code to compile.
 
