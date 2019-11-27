@@ -7,6 +7,7 @@ package data;
 
 import org.lwjgl.opengl.Display;
 import static helpers.Artist.*;
+import helpers.Clock;
 import org.lwjgl.Sys;
 
 /**
@@ -20,16 +21,40 @@ public class Boot {
         // Start OpenGL session
         BeginSession();
         
-        TileGrid grid = new TileGrid();
+        int[][] map = {
+            {0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 2, 2, 2, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 2, 2, 2, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 2, 2, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+        
+        TileGrid grid = new TileGrid(map);
+        grid.SetTile(3, 6, grid.GetTile(2, 6).getType());
+        Enemy e = new Enemy(QuickLoad("enemy"), grid.GetTile(10, 10),grid, 64, 64,5);
+        Wave wave = new Wave(20, e);
+        Player player = new Player(grid);
         while (!Display.isCloseRequested()) {
+            Clock.update();
             
             grid.Draw();
-            
+            wave.Update();
+            player.Update();
             
             // Set fps_max
             
             Display.update();
-            UpdateFPS();   // Show fps counter
+            //UpdateFPS();   // Show fps counter
             Display.sync(60);
                     
         }
